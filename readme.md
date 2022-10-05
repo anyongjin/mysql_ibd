@@ -1,4 +1,4 @@
-[жпнд](readme.cn.md)
+[for chinese](readme.cn.md)
 
 # Introduction
 This is a script for importing database tables from mysql's ibd file, targeting the innodb storage engine.  
