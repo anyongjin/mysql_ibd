@@ -1,0 +1,15 @@
+input_ibds: 'G:\mysqldata\demo'  # directory of backup ibd files
+mysql_db_dir: 'E:\mysqldata\demo'  # data directory of new database
+output: 'G:\mysqldata'  # temp directory where to save sql file and sdi files
+skip_tbls: []
+only_tbls: []  # only execute for specified tables
+skip_nonempty_tbl: false  # if true, skip tables in new database if not empty while loading data from ibd
+db_info:
+  host: localhost
+  port: 3306
+  user: root
+  passwd: '123'
+  db: demo
+  charset: utf8
+  connect_timeout: 20
+  read_timeout: 30
