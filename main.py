@@ -133,7 +133,7 @@ def link_tables_ibd(config: dict):
         tbl_unlinked = False
         if skip_nonempty:
             try:
-                cursor.execute(f"SELECT EXISTS (SELECT 1 FROM {tbl_name});")
+                cursor.execute(f"SELECT EXISTS (SELECT 1 FROM `{tbl_name})`;")
                 row_num = cursor.fetchone()[0]
                 if row_num > 0:
                     continue
@@ -146,10 +146,10 @@ def link_tables_ibd(config: dict):
         ibd_size = os.path.getsize(ibd_path)
         logger.info(f'importing table: {tbl_name}, size: {ibd_size}')
         if not tbl_unlinked:
-            cursor.execute(f'ALTER TABLE {tbl_name} DISCARD TABLESPACE;')
+            cursor.execute(f'ALTER TABLE `{tbl_name}` DISCARD TABLESPACE;')
         shutil.copy(ibd_path, os.path.join(mysql_out, ibd_name))
         try:
-            cursor.execute(f'ALTER TABLE {tbl_name} IMPORT TABLESPACE;')
+            cursor.execute(f'ALTER TABLE `{tbl_name}` IMPORT TABLESPACE;')
         except pymysql.err.InternalError as e:
             if e.args[0] == 1808:
                 mismatch_tbls.add(tbl_name)

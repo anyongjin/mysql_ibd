@@ -29,3 +29,9 @@
 **Schema mismatch (Clustered index validation failed. Because the .cfg file is missing, table definition of the IBD file could be different. Or the data file itself is already corrupted.)**  
 在mysql8之后的ibd导入时，偶尔会出现这个错误。使用`ibd2sdi`工具从新表生成sdi，对比新旧的sdi文件，基本都是一样的，暂时不确定原因。遇到这个错误暂时只能用其他手段恢复表数据了。如果哪位朋友解决了这个问题，请打开issue告知~
 
+**自增起始值问题**  
+从ibd文件导入数据后，表的自增列的起始值依然是0，在插入新数据的时候会报错，可使用下面命令手动查询恢复：  
+```sql
+select max(id) from `mytable`;
+ALTER TABLE `mytable` AUTO_INCREMENT=val+1
+```
