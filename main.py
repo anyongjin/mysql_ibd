@@ -91,15 +91,22 @@ def ibd2sql(args: dict):
         for idx in indexes:
             if idx.get('hidden'):
                 continue
-            builder.write(',\n\t')
-            elt: dict = idx.get('elements')[0]
+            elts = idx.get('elements')
+            if not elts:
+                continue
             idx_name = idx.get('name')
-            col_name = columns[elt.get('column_opx')].get('name')
+            use_elts = [elt for elt in elts if elt['length'] < 4294967295]
+            if not use_elts:
+                logger.warn(f'invalid index found, no columns linked: {ibd_name}/{idx_name}')
+                continue
+            builder.write(',\n\t')
+            col_names = [columns[elt.get('column_opx')].get('name') for elt in use_elts]
+            show_cols = ', '.join(f'`{name}`' for name in col_names)
             idx_type = idx.get('type')
             if idx_type == 1:
-                builder.write(f'PRIMARY KEY (`{col_name}`)')
+                builder.write(f'PRIMARY KEY ({show_cols})')
             elif idx_type in {2, 3}:
-                builder.write(f'INDEX `{idx_name}` (`{col_name}`)')
+                builder.write(f'INDEX `{idx_name}` ({show_cols})')
             else:
                 raise ValueError(f'unsupport index type: {idx_type} for {ibd_name}/{idx_name}')
         builder.write(f'\n) ENGINE={out_tbl_engine};\n\n')
