@@ -23,11 +23,19 @@ logger.addHandler(ch)
 def ibd2sql(args: dict):
     global ibd2sdi_path
     if not ibd2sdi_path or not os.path.isfile(ibd2sdi_path):
-        where_cmd = 'where' if platform.system() == 'Windows' else 'whereis'
+        is_windows = platform.system() == 'Windows'
+        where_cmd = 'where' if is_windows else 'whereis'
         ibd2sdi_info = subprocess.run([where_cmd, 'ibd2sdi'], stdout=subprocess.PIPE)
         if ibd2sdi_info.returncode != 0:
             raise FileNotFoundError('`ibd2sdi` path is invalid')
         ibd2sdi_path = ibd2sdi_info.stdout.decode('utf-8').strip()
+        if not is_windows:
+            res_arr = ibd2sdi_path.split(' ')
+            if len(res_arr) <= 1:
+                raise ValueError('no installed `ibd2sdi` found on system!')
+            ibd2sdi_path = res_arr[1]
+            if not os.path.isfile(ibd2sdi_path):
+                raise FileNotFoundError(f'ibd2sdi({ibd2sdi_path}) not exist, output: {" ".join(res_arr)} ')
     db_name = os.path.basename(args['input_ibds'])
     ibd_names = [name for name in os.listdir(args['input_ibds']) if name.endswith('.ibd')]
     if not os.path.isdir(args['output']):
