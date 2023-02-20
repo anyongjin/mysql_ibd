@@ -115,6 +115,8 @@ def ibd2sql(args: dict):
                 builder.write(f'PRIMARY KEY ({show_cols})')
             elif idx_type in {2, 3}:
                 builder.write(f'INDEX `{idx_name}` ({show_cols})')
+            elif idx_type == 4:
+                builder.write(f'FULLTEXT `{idx_name}` ({show_cols})')
             else:
                 raise ValueError(f'unsupport index type: {idx_type} for {ibd_name}/{idx_name}')
         builder.write(f'\n) ENGINE={out_tbl_engine};\n\n')
