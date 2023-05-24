@@ -22,6 +22,7 @@ If there are many tables, you can use this script to modify the `config.yml` con
 ## only ibd files (versions after mysql 8)
 Try to keep the new database version consistent with the original database version, otherwise errors may occur when importing data.
 
+0. Make sure that mysql 8 is installed and the database version corresponding to the ibd file is consistent, and add the `bin` directory of mysql to the system environment variable (otherwise the `where ibd2sdi` command will fail)
 1. Modify the `input_ibds` and `output` items in `config.yml` and set them to the ibd file directory
 2. Execute `python main.py tosql` to generate sdi and sql files from ibd files
 3. Check sql file and execute, create empty table

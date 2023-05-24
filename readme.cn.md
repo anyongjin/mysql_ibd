@@ -19,6 +19,7 @@
 
 ## 只有ibd文件
 > 尽量保持新数据库和原数据库版本一致，否则可能在导入数据时出现错误。
+0. 确保mysql 8已安装且和ibd文件对应的数据库版本一致，添加mysql的bin目录到系统环境变量（否则where命令查找ibd2sdi会失败）
 1. 修改`config.yml`中的`input_ibds`和`output`项，设置为ibd文件目录
 2. 执行`python main.py tosql`，从ibd文件生成sdi和sql文件
 3. 检查sql文件并执行，创建空表
