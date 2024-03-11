@@ -95,7 +95,8 @@ def ibd2sql(args: dict):
                         builder.write(f" DEFAULT '{def_val}'")
             comment = col.get('comment')
             if comment:
-                builder.write(f" COMMENT {comment}")
+                comment = comment.replace("'", "''")
+                builder.write(f" COMMENT '{comment}'")
         for idx in indexes:
             if idx.get('hidden'):
                 continue
