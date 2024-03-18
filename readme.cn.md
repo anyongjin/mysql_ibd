@@ -21,14 +21,14 @@
 > 尽量保持新数据库和原数据库版本一致，否则可能在导入数据时出现错误。
 0. 确保mysql 8已安装且和ibd文件对应的数据库版本一致，添加mysql的bin目录到系统环境变量（否则where命令查找ibd2sdi会失败）
 1. 修改`config.yml`中的`input_ibds`和`output`项，设置为ibd文件目录
-2. 执行`python main.py tosql`，从ibd文件生成sdi和sql文件
+2. 执行`python main.py tosql`，从ibd文件生成sdi和sql文件（如果遇到缺少包错误，请使用`pip install xxx`安装缺少的包）
 3. 检查sql文件并执行，创建空表
 4. 修改`config.yml`中`mysql_db_dir`和`db_info`项，设置为新数据库的数据目录
 5. 执行`python main.py load_data`从ibd文件批量导入数据到数据库（请在数据库服务器上运行）
 
 # 相关问题
 **Schema mismatch (Clustered index validation failed. Because the .cfg file is missing, table definition of the IBD file could be different. Or the data file itself is already corrupted.)**  
-在mysql8之后的ibd导入时，偶尔会出现这个错误。使用`ibd2sdi`工具从新表生成sdi，对比新旧的sdi文件，基本都是一样的，暂时不确定原因。遇到这个错误暂时只能用其他手段恢复表数据了。如果哪位朋友解决了这个问题，请打开issue告知~
+在mysql8之后的ibd导入时，偶尔会出现这个错误。使用`ibd2sdi`工具从新表生成sdi，对比新旧的sdi文件，基本都是一样的。issues中有朋友提到可能是生成的sql和原始sql有差异导致表结构信息不完全匹配，他通过将定义主键和索引的语句从`INDEX`改为`KEY`解决了，可能也有其他错误情况，可作为一个方向：#14
 
 **自增起始值问题**  
 从ibd文件导入数据后，表的自增列的起始值依然是0，在插入新数据的时候会报错，可使用下面命令手动查询恢复：  
