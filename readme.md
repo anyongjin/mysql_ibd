@@ -20,7 +20,8 @@ If there are few tables, you can manually import table data from ibd directly ac
 If there are many tables, you can use this script to modify the `config.yml` configuration file, update the directory and database information, and use the command `python main.py load_data` to import data into the database.
 
 ## only ibd files (versions after mysql 8)
-Try to keep the new database version consistent with the original database version, otherwise errors may occur when importing data.
+> Try to keep the new database version consistent with the original database version, otherwise errors may occur when importing data.
+> If the original table creation SQL can be found, there's no need to proceed with step 2; instead, use the original SQL to create an empty table, which can avoid unnecessary errors.
 
 0. Make sure that mysql 8 is installed and the database version corresponding to the ibd file is consistent, and add the `bin` directory of mysql to the system environment variable (otherwise the `where ibd2sdi` command will fail)
 1. Modify the `input_ibds` and `output` items in `config.yml` and set them to the ibd file directory
@@ -31,7 +32,7 @@ Try to keep the new database version consistent with the original database versi
 
 # related question
 **Schema mismatch (Clustered index validation failed. Because the .cfg file is missing, table definition of the IBD file could be different. Or the data file itself is already corrupted.)**  
-Occasionally this error occurs when importing ibd after mysql8. Use the ibd2sdi tool to generate sdi from the new table, and compare the old and new sdi files, which are basically the same. In the issues, a friend mentioned that the difference between the generated SQL and the original SQL might cause the table structure information to not match completely. He solved it by changing the statements that define primary keys and indexes from INDEX to KEY. There might also be other error situations, which could be considered as a direction: #14.
+Occasionally this error occurs when importing ibd after mysql8. Use the ibd2sdi tool to generate sdi from the new table, and compare the old and new sdi files, which are basically the same. In the issues, a friend mentioned that the difference between the generated SQL and the original SQL might cause the table structure information to not match completely. He solved it by changing the statements that define primary keys and indexes from INDEX to KEY. There might also be other error situations, which could be considered as a direction: [#14](/../../issues/14).
 
 **Bad start value for auto-increment column**  
 After importing data from the ibd file, the starting value of the auto-increment table is still 0, and an error would occur while inserting new data. You can use the following command to manually query and fix it:  
