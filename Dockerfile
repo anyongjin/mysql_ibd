@@ -15,9 +15,15 @@ RUN apt-get update && \
 WORKDIR /opt/mysql_idb
 COPY requirements.txt ./
 
-RUN pip install \
+RUN . /etc/os-release; \
+  if (( $VERSION_ID > 11 )); then \
+  pip install \
   --break-system-packages \
-  -r ./requirements.txt
+  -r ./requirements.txt; \
+  else \
+  pip install \
+  -r ./requirements.txt; \
+  fi
 
 COPY . ./
 
