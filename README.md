@@ -18,6 +18,19 @@ This project supports the following two functions:
 * For versions after mysql 8, support for generating table statements from ibd
 * For any version of mysql, after the table structure is restored, the ibd file can be imported into table data in batches
 
+# How to install
+
+In Docker or K8s no steps required just use pre built image or build one from Dockerfile in project
+
+If you are not using Docker or K8s
+
+0. Clone Project
+1. Make sure that `ibd2sdi` command is available (install mysql server package).
+2. Install Python3 and ensure Pip is installed
+3. Run `pip install -r requirements.txt`
+
+> you are ready to go... refer to How to use section to continue
+
 # How to use
 
 ## Both frm and ibd files exists (versions earlier than mysql 8)
@@ -28,12 +41,11 @@ If there are few tables, you can manually import table data from ibd directly ac
 
 If there are many tables, you can use this script to modify the `config.yml` configuration file, update the directory and database information, and use the command `python main.py load_data` to import data into the database.
 
-## only ibd files (versions after mysql 8) [No Docker/K8s]
+## only ibd files (versions after mysql 8)
 >
 > Try to keep the new database version consistent with the original database version, otherwise errors may occur when importing data.
 > If the original table creation SQL can be found, there's no need to proceed with step 2; instead, use the original SQL to create an empty table, which can avoid unnecessary errors.
 
-0. Make sure that MySQL Tools are installed (use `ibd2sdi --help` to confirm)
 1. Modify config.yml file according to it's comments (use `-c` or `--config` in your commands if you want to have config in another location)
 2. Execute `python main.py tosql` to generate sdi and sql files from ibd files (set `apply_sql` to `true` in config to run them on provided connection, but it's better to check/review output then run that manually)
 3. Execute `python main.py load_data` to batch import data from the ibd file to the database (Both input idb and `mysql_db_dir` should be available + connection availability)
