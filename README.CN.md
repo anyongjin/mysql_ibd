@@ -1,3 +1,5 @@
+[For English](README.md)
+
 # ˵��
 
 ����һ�����ڴ�mysql��ibd�ļ��������ݿ���Ľű������innodb�洢���档

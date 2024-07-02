@@ -1,4 +1,4 @@
-[For Chinese 中文](readme.cn.md)
+[For Chinese 中文](README.CN.md)
 
 # Introduction
 

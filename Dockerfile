@@ -1,5 +1,5 @@
-# defualts to latest mysql 8
-ARG MYSQL_VERSION=8
+# defualts to latest mysql version
+ARG MYSQL_VERSION=latest
 
 FROM bitnami/mysql:${MYSQL_VERSION}
 

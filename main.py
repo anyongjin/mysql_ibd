@@ -48,10 +48,12 @@ def ibd2sql(args: dict):
     sdi_out = os.path.join(args["output"], db_name + "_sdi")
     if not os.path.isdir(sdi_out):
         os.mkdir(sdi_out)
-    skip_tbls: list = args.get("skip_tbls")
+    skip_tbls: list = args.get("skip_tbls", [])
     sql_path = os.path.join(args["output"], db_name + ".sql")
     builder = open(sql_path, "w", encoding="utf-8")
-    only_tbls: list = args.get("only_tbls")
+    only_tbls: list = args.get("only_tbls", [])
+    include_drop: bool = args.get("include_drop", True)
+
     for ibd_name in ibd_names:
         tbl_name = ibd_name.rstrip(".ibd")
         if tbl_name in skip_tbls:
@@ -79,7 +81,7 @@ def ibd2sql(args: dict):
         indexes: List[Dict] = dd_obj.get("indexes")
         out_tbl_name: str = dd_obj.get("name")
         out_tbl_engine: str = dd_obj.get("engine")
-        if args.get("include_drop", True):
+        if include_drop:
             builder.write(f"DROP TABLE IF EXISTS `{out_tbl_name}`;\n")
         builder.write(f"CREATE TABLE `{out_tbl_name}` (\n")
         is_first = True
@@ -154,11 +156,11 @@ def link_tables_ibd(config: dict):
     cursor = pymysql.connect(**db_config).cursor()
     ibd_dir = config["input_ibds"]
     ibd_names = [name for name in os.listdir(ibd_dir) if name.endswith(".ibd")]
-    skip_tbls: list = config.get("skip_tbls")
+    skip_tbls: list = config.get("skip_tbls", [])
     mysql_out = config["mysql_db_dir"]
     skip_nonempty = config["skip_nonempty_tbl"]
     mismatch_tbls, mismatch_err = set(), None
-    only_tbls: list = config.get("only_tbls")
+    only_tbls: list = config.get("only_tbls", [])
     for ibd_name in ibd_names:
         tbl_name = os.path.splitext(ibd_name)[0]
         if tbl_name in skip_tbls:
