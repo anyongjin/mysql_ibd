@@ -28,17 +28,28 @@ If there are few tables, you can manually import table data from ibd directly ac
 
 If there are many tables, you can use this script to modify the `config.yml` configuration file, update the directory and database information, and use the command `python main.py load_data` to import data into the database.
 
-## only ibd files (versions after mysql 8)
+## only ibd files (versions after mysql 8) [No Docker/K8s]
 >
 > Try to keep the new database version consistent with the original database version, otherwise errors may occur when importing data.
 > If the original table creation SQL can be found, there's no need to proceed with step 2; instead, use the original SQL to create an empty table, which can avoid unnecessary errors.
 
-0. Make sure that mysql 8 is installed and the database version corresponding to the ibd file is consistent, and add the `bin` directory of mysql to the system environment variable (otherwise the `where ibd2sdi` command will fail)
-1. Modify the `input_ibds` and `output` items in `config.yml` and set them to the ibd file directory
-2. Execute `python main.py tosql` to generate sdi and sql files from ibd files (If you encounter a missing package error, please use pip install xxx to install the missing package.)
-3. Check sql file and execute, create empty table
-4. Modify the `mysql_db_dir` and `connection_info` items in `config.yml` and set them to the data directory of the new database
-5. Execute `python main.py load_data` to batch import data from the ibd file to the database(Please run on the database server)
+0. Make sure that MySQL Tools are installed (use `ibd2sdi --help` to confirm)
+1. Modify config.yml file according to it's comments (use `-c` or `--config` in your commands if you want to have config in another location)
+2. Execute `python main.py tosql` to generate sdi and sql files from ibd files (set `apply_sql` to `true` in config to run them on provided connection, but it's better to check/review output then run that manually)
+3. Execute `python main.py load_data` to batch import data from the ibd file to the database (Both input idb and `mysql_db_dir` should be available + connection availability)
+4. wait for it to load the data into your new database
+
+## With K8s
+
+Checkout `k8s-sample.yaml` and changes values according to your needs (you will also need an active instance of the new database + Datadir access) and apply that in your cluster and exec into the newly created pod
+
+Other steps are like previous section
+
+## With Docker
+
+Bring up a container with both new and old data available (with connection access to new db) with image: `ghcr.io/mhkarimi1383/mysql_idb:mysql-8.4` (change mysql version if needed)
+
+Other steps are like previous section
 
 # related question
 
