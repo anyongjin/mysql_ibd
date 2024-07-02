@@ -1,15 +1,17 @@
-input_ibds: 'G:\mysqldata\demo'  # directory of backup ibd files
-mysql_db_dir: 'E:\mysqldata\demo'  # data directory of new database
-output: 'G:\mysqldata'  # temp directory where to save sql file and sdi files
-skip_tbls: []
-only_tbls: []  # only execute for specified tables
-skip_nonempty_tbl: false  # if true, skip tables in new database if not empty while loading data from ibd
-db_info:
+input_ibds: "/path/to/old/data/dbname" # directory of backup ibd files
+mysql_db_dir: "/path/to/new/data/dbname" # data directory of new database (pointing to database dir)
+output: "/path/to/out" # temp directory where to save sql file and sdi files
+include_drop: true # include drop commands in sql output
+apply_sql: false # apply sql files to dest (to connection_info)
+skip_tbls: [] # exclude some tables
+only_tbls: [] # only execute for specified tables
+skip_nonempty_tbl: false # if true, skip tables in new database if not empty while loading data from ibd
+connection_info:
   host: localhost
   port: 3306
   user: root
-  passwd: '123'
+  passwd: "123"
   db: demo
   charset: utf8
   connect_timeout: 20
-  read_timeout: 30
+  read_timeout: 30 # set to higher value if tables are big
