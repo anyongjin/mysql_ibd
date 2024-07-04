@@ -142,7 +142,7 @@ def ibd2sql(args: dict):
     builder.close()
     logger.info(f"sql generated at: {sql_path}")
     if args["apply_sql"]:
-        logger.info(f"applying output to dest")
+        logger.info("applying output to dest")
         with open(sql_path, "r") as outputfile:
             db_config = config["connection_info"]
             cursor = pymysql.connect(**db_config).cursor()
