@@ -53,7 +53,7 @@ If there are many tables, you can use this script to modify the `config.yml` con
 
 ## With K8s
 
-Checkout `k8s-sample.yaml` and changes values according to your needs (you will also need an active instance of the new database + Datadir access) and apply that in your cluster and exec into the newly created pod
+Checkout `k8s-sample.yaml` and changes value according to your needs (you will also need an active instance of the new database + Datadir access) and apply that in your cluster and exec into the newly created pod
 
 Other steps are like previous section
 
