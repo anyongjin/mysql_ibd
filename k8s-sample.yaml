@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-idb
+  labels:
+    name: mysql-idb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mysql-idb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: mysql-idb
+    spec:
+      containers:
+        # Change image if needed
+        - image: ghcr.io/mhkarimi1383/mysql_idb:mysql-8.4
+          imagePullPolicy: IfNotPresent
+          name: mysql-idb
+          resources:
+            # Setting minimum requirements for scheduling.
+            requests:
+              cpu: 2
+              memory: "2Gi"
+            limits: {}
+          livenessProbe: {}
+          readinessProbe: {}
+          command:
+            - bash
+            - -c
+          args: ["tail -f /dev/null"]
+          env: []
+          ports: []
+          volumeMounts:
+            - mountPath: /old-data
+              name: old-data
+            - mountPath: /new-data
+              name: new-data
+      volumes:
+        - name: old-data
+          persistentVolumeClaim:
+            claimName: bad-mysql-data
+        - name: new-data
+          persistentVolumeClaim:
+            claimName: new-mysql-data
+      restartPolicy: Always
