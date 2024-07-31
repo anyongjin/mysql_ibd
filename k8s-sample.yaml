@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         # Change image if needed
-        - image: ghcr.io/mhkarimi1383/mysql_idb:mysql-8.4
+        - image: ghcr.io/anyongjin/mysql_idb:mysql-8.4
           imagePullPolicy: IfNotPresent
           name: mysql-idb
           resources:
