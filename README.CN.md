@@ -23,7 +23,7 @@
 3. 安装依赖：`pip install requirements.txt`
 
 ## docker安装
-使用镜像：`ghcr.io/mhkarimi1383/mysql_idb:mysql-8.4`（可根据需要更改mysql版本）  
+使用镜像：`ghcr.io/anyongjin/mysql_idb:mysql-8.4`（可根据需要更改mysql版本）  
 也可从`Dockerfile`构建镜像并使用
 
 ## k8s中使用

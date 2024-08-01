@@ -59,7 +59,7 @@ Other steps are like previous section
 
 ## With Docker
 
-Bring up a container with both new and old data available (with connection access to new db) with image: `ghcr.io/mhkarimi1383/mysql_idb:mysql-8.4` (change mysql version if needed)
+Bring up a container with both new and old data available (with connection access to new db) with image: `ghcr.io/anyongjin/mysql_idb:mysql-8.4` (change mysql version if needed)
 
 Other steps are like previous section
 
