@@ -32,7 +32,7 @@ RUN tar vxf Python-${PYTHON_VERSION}.tgz && \
   make -j $(nproc) && \
   make altinstall && \
   ln -s /usr/local/bin/python3.12 /usr/local/bin/python && \
-  ln -s /usr/local/bin/python3.12 /usr/local/bin/python3 \
+  ln -s /usr/local/bin/python3.12 /usr/local/bin/python3 && \
   ln -s /usr/local/bin/pip3.12 /usr/local/bin/pip && \
   ln -s /usr/local/bin/pip3.12 /usr/local/bin/pip3
 
