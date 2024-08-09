@@ -1,3 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-idb
+  labels:
+    name: mysql-idb
+data:
+  bashrc: |
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    PS1='[\u@\h \W]\$ '
+    alias mysql-idb='python /opt/mysql_idb/main.py --config=/opt/mysql_idb/config.yml'
+  config.yml: |
+    input_ibds: "/old-data/mydb" # directory of backup ibd files
+    mysql_db_dir: "/new-data/mydb" # data directory of new database (pointing to database dir)
+    output: "/tmp/mysql_idb" # temp directory where to save sql file and sdi files
+    include_drop: true # include drop commands in sql output
+    apply_sql: false # apply sql files to dest (to connection_info)
+    skip_tbls: [] # exclude some tables
+    only_tbls: [] # only execute for specified tables
+    skip_nonempty_tbl: false # if true, skip tables in new database if not empty while loading data from ibd
+    connection_info:
+      host: new-mysql.default.svc.cluster.local
+      port: 3306
+      user: root
+      passwd: "secretpassword"
+      db: mydb
+      charset: utf8
+      connect_timeout: 300
+      read_timeout: 300
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,7 +71,16 @@ spec:
               name: old-data
             - mountPath: /new-data
               name: new-data
+            - mountPath: /opt/mysql_idb/config.yml
+              subPath: config.yml
+              name: configs
+            - mountPath: /root/.bashrc
+              subPath: bashrc
+              name: configs
       volumes:
+        - name: configs
+          configMap:
+            name: mysql-idb
         - name: old-data
           persistentVolumeClaim:
             claimName: bad-mysql-data
@@ -48,3 +88,4 @@ spec:
           persistentVolumeClaim:
             claimName: new-mysql-data
       restartPolicy: Always
+---

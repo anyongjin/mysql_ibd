@@ -17,7 +17,8 @@ logger = logging.getLogger("mysql_ibd")
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
-ch.setFormatter(logging.Formatter("%(asctime)s %(process)d %(levelname)s %(message)s"))
+ch.setFormatter(logging.Formatter(
+    "%(asctime)s %(process)d %(levelname)s %(message)s"))
 logger.addHandler(ch)
 
 
@@ -26,7 +27,8 @@ def ibd2sql(args: dict):
     if not ibd2sdi_path or not os.path.isfile(ibd2sdi_path):
         is_windows = platform.system() == "Windows"
         where_cmd = "where" if is_windows else "whereis"
-        ibd2sdi_info = subprocess.run([where_cmd, "ibd2sdi"], stdout=subprocess.PIPE)
+        ibd2sdi_info = subprocess.run(
+            [where_cmd, "ibd2sdi"], stdout=subprocess.PIPE)
         if ibd2sdi_info.returncode != 0:
             raise FileNotFoundError("`ibd2sdi` path is invalid")
         ibd2sdi_path = ibd2sdi_info.stdout.decode("utf-8").strip()
@@ -42,7 +44,8 @@ def ibd2sql(args: dict):
                 )
     db_name = os.path.basename(args["input_ibds"])
     ibd_names = [
-        name for name in os.listdir(args["input_ibds"]) if name.endswith(".ibd")
+        name for name in os.listdir(args["input_ibds"])
+        if name.endswith(".ibd")
     ]
     if not os.path.isdir(args["output"]):
         os.mkdir(args["output"])
@@ -62,7 +65,8 @@ def ibd2sql(args: dict):
         if only_tbls and tbl_name not in only_tbls:
             continue
         logger.info(f"handle table: {ibd_name}")
-        sdi_path = os.path.join(sdi_out, os.path.splitext(ibd_name)[0] + ".sdi")
+        sdi_path = os.path.join(
+            sdi_out, os.path.splitext(ibd_name)[0] + ".sdi")
         if not os.path.isfile(sdi_path):
             ibd_path = os.path.join(args["input_ibds"], ibd_name)
             sdi_result = subprocess.run(
@@ -71,7 +75,8 @@ def ibd2sql(args: dict):
             )
             if sdi_result.returncode != 0:
                 raise ValueError(f"[{ibd_name}] ibd2sdi error:{sdi_result}")
-        sdi_data: dict = json.load(open(sdi_path, "r", encoding="utf-8"))[1]["object"]
+        sdi_data: dict = json.load(
+            open(sdi_path, "r", encoding="utf-8"))[1]["object"]
         if sdi_data.get("dd_object_type") != "Table":
             logger.warning(
                 f'unsupported sdi type: {sdi_data.get("dd_object_type")} for {
@@ -130,7 +135,8 @@ def ibd2sql(args: dict):
                 )
                 continue
             builder.write(",\n\t")
-            col_names = [columns[elt.get("column_opx")].get("name") for elt in use_elts]
+            col_names = [columns[elt.get("column_opx")].get(
+                "name") for elt in use_elts]
             show_cols = ", ".join(f"`{name}`" for name in col_names)
             idx_type = idx.get("type")
             if idx_type == 1:
@@ -216,7 +222,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="generate sql from ibd for mysql innodb engine, and import data from ibd automatically"
+        description="generate sql from ibd for mysql innodb engine, and import data from ibd automatically"  # noqa: E501
     )
     parser.add_argument(
         "-c",
@@ -226,7 +232,8 @@ if __name__ == "__main__":
         dest="config",
     )
     subparsers = parser.add_subparsers(help="tosql|load_data", dest="cmd")
-    sql_parser = subparsers.add_parser("tosql", help="generate sql from ibd files")
+    sql_parser = subparsers.add_parser(
+        "tosql", help="generate sql from ibd files")
     load_parser = subparsers.add_parser(
         "load_data", help="load data from ibd for tables"
     )
