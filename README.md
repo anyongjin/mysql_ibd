@@ -1,5 +1,7 @@
 [For Chinese 中文](README.CN.md)
 
+[![Docker Tags](https://ghcr-badge.egpl.dev/anyongjin/mysql_ibd/tags?trim=major&color=green_2&label=Docker%20Tags&ignore=*.sig)](https://ghcr.io/anyongjin/mysql_ibd/)
+
 # Introduction
 
 This is a script for importing database tables from mysql's ibd file, targeting the innodb storage engine.
