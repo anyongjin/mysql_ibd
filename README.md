@@ -24,7 +24,7 @@ In Docker or K8s no steps required just use pre built image or build one from Do
 
 If you are not using Docker or K8s
 
-0. Clone Project
+0. Ensure Python3.12 or newer is install & Clone Project
 1. Make sure that `ibd2sdi` command is available (install mysql server package).
 2. Install Python3 and ensure Pip is installed
 3. Run `pip install -r requirements.txt`
