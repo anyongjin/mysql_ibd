@@ -1,6 +1,8 @@
 [For Chinese 中文](README.CN.md)
 
 [![Docker Tags](https://ghcr-badge.egpl.dev/anyongjin/mysql_ibd/tags?trim=major&color=green_2&label=Docker%20Tags&ignore=*.sig)](https://ghcr.io/anyongjin/mysql_ibd/)
+![GitHub branch check runs](https://img.shields.io/github/check-runs/anyongjin/mysql_ibd/master)
+![Python Version](https://img.shields.io/badge/python-3.12-green)
 
 # Introduction
 
