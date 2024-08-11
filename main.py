@@ -216,7 +216,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="generate sql from ibd for mysql innodb engine, and import data from ibd automatically"
+        description="generate sql from ibd for mysql innodb engine, and import data from ibd automatically"  # noqa: E501
     )
     parser.add_argument(
         "-c",

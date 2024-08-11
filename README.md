@@ -1,5 +1,9 @@
 [For Chinese 中文](README.CN.md)
 
+[![Docker Tags](https://ghcr-badge.egpl.dev/anyongjin/mysql_ibd/tags?trim=major&color=green_2&label=Docker%20Tags&ignore=*.sig)](https://ghcr.io/anyongjin/mysql_ibd/)
+![GitHub branch check runs](https://img.shields.io/github/check-runs/anyongjin/mysql_ibd/master)
+![Python Version](https://img.shields.io/badge/python-3.12-green)
+
 # Introduction
 
 This is a script for importing database tables from mysql's ibd file, targeting the innodb storage engine.
@@ -24,7 +28,7 @@ In Docker or K8s no steps required just use pre built image or build one from Do
 
 If you are not using Docker or K8s
 
-0. Clone Project
+0. Ensure Python3.12 or newer is install & Clone Project
 1. Make sure that `ibd2sdi` command is available (install mysql server package).
 2. Install Python3 and ensure Pip is installed
 3. Run `pip install -r requirements.txt`
@@ -53,7 +57,9 @@ If there are many tables, you can use this script to modify the `config.yml` con
 
 ## With K8s
 
-Checkout `k8s-sample.yaml` and changes value according to your needs (you will also need an active instance of the new database + Datadir access) and apply that in your cluster and exec into the newly created pod
+Checkout `k8s-sample.yaml` and changes value according to your needs (you will also need an active instance of the new database + Datadir access) and apply that in your cluster and exec into the newly created pod using `kubectl exec -it -n NAMESPACE po/PODNAME -- bash`
+
+Also an alias added be make it easier to use called `mysql-db` use `mysql-idb` instead of `python main.py`
 
 Other steps are like previous section
 
