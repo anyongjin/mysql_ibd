@@ -236,4 +236,4 @@ if __name__ == "__main__":
     command_mapping = {"tosql": ibd2sql, "load_data": link_tables_ibd}
     if args.cmd not in command_mapping.keys():
         raise ValueError(f"unsupported sub command: {args.cmd}")
-    command_mapping[args.cmd]()
+    command_mapping[args.cmd](config)
