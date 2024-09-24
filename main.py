@@ -20,6 +20,16 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(logging.Formatter("%(asctime)s %(process)d %(levelname)s %(message)s"))
 logger.addHandler(ch)
 
+fixed_def_names = {"CURRENT_TIMESTAMP", "LOCALTIMESTAMP", "UNIX_TIMESTAMP", "UTC_TIMESTAMP", "TIMESTAMP", "NOW", 
+                   "CURRENT_DATE", "CURRENT_TIME", "CURDATE", "CURTIME"}
+
+def is_fixed_def_name(name: str) -> bool:
+    name = name.upper()
+    for n in fixed_def_names:
+        if name.startswith(n):
+            return True
+    return False
+
 
 def ibd2sql(args: dict):
     global ibd2sdi_path
@@ -107,7 +117,7 @@ def ibd2sql(args: dict):
                 else:
                     def_val = col.get("default_value_utf8")
                     if def_val:
-                        if def_val == "TIMESTAMP":
+                        if is_fixed_def_name(def_val):
                             builder.write(f" DEFAULT {def_val}")
                         else:
                             builder.write(f" DEFAULT '{def_val}'")
