@@ -160,10 +160,29 @@ def ibd2sql(args: dict):
     logger.info(f"sql generated at: {sql_path}")
     if args["apply_sql"]:
         logger.info("applying output to dest")
+        continue_on_error = args.get("continue_on_error", False)
         with open(sql_path, "r") as outputfile:
             db_config = config["connection_info"]
-            cursor = pymysql.connect(**db_config).cursor()
-            cursor.executemany(outputfile.read(), ())
+            with pymysql.connect(**db_config) as connection:
+                with connection.cursor() as cursor:
+                    sql_commands = outputfile.read().split(';')
+
+                    rollback = False
+                    for command in sql_commands:
+                        command = command.strip()  # Remove leading/trailing whitespace
+                        if command:  # Ensure the command is not empty
+                            try:
+                                cursor.execute(command)  # Execute each command
+                            except pymysql.MySQLError as e:
+                                print(f"Error executing command: {command} - {e}")
+                                if not continue_on_error:
+                                    rollback = True
+                                    break
+
+                    if rollback:
+                        connection.rollback()
+                    else:
+                        connection.commit()
 
 
 def link_tables_ibd(config: dict):
