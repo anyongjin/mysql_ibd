@@ -18,6 +18,7 @@ data:
     apply_sql: false # apply sql files to dest (to connection_info)
     skip_tbls: [] # exclude some tables
     only_tbls: [] # only execute for specified tables
+    continue_on_error: false # if true, continue on sql execute error
     skip_nonempty_tbl: false # if true, skip tables in new database if not empty while loading data from ibd
     connection_info:
       host: new-mysql.default.svc.cluster.local
